@@ -203,3 +203,52 @@ from courses
 group by category
 having avg(price) > 60
 ```
+
+- Count how many students are enrolled in each course.
+
+```
+select count(learner_id) as "enrolled students" ,
+c.course_title from courses as c
+left join enrollments as e
+on c.course_id = e.course_id
+group by c.course_title
+order by c.course_title
+```
+
+- Display student full name, course title, and paid amount using an INNER JOIN.
+
+```
+select (l.first_name || ' ' || l.last_name) as "full name",
+c.course_title, e.paid_amount from learners as l
+inner join enrollments as e
+on l.learner_id = e.learner_id
+inner join courses as c
+on e.course_id = c.course_id
+```
+
+- Display all students and their enrolled courses.
+- Include students who have not enrolled in any course using a LEFT JOIN.
+
+```
+select first_name, last_name,course_title from learners as l
+  left join enrollments as e
+  on l.learner_id = e.learner_id
+  left join courses as c
+  on c.course_id = e.course_id
+order by l.first_name desc
+```
+
+- Display all students and all courses, even if there is no matching enrollment, using a FULL JOIN.
+
+```
+select first_name, course_title as "enrolled courses" from learners
+full join enrollments on  learners.learner_id = enrollments.learner_id
+full join courses on courses.course_id = enrollments.course_id
+```
+
+- Show the number of enrollments per year based on enrollment_date.
+
+```
+select extract(year from enrollment_date) AS enrollment_year,count(*) from enrollments
+group by extract(year from enrollment_date)
+```
